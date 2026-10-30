@@ -1,0 +1,123 @@
+[
+    {
+        "id": "scenario-1",
+        "image": "assets/scenarios/scenario-1.png",
+        "title": "Un lundi matin à l'accueil",
+        "personaName": "M. Renard",
+        "situation": "M. Renard, 52 ans, pousse la porte de la Maison Horizon sans rendez-vous. Son entreprise de transport a quitté Valbourg et il ne sait pas à qui s'adresser.",
+        "objectives": ["Mettre la personne à l'aise", "Comprendre ce qui l'amène", "Proposer une suite claire"],
+        "recommendations": [
+            { "module": "0 MODULE - Arriver à la Maison Horizon", "reason": "Pour revoir la matinée de Nadia." }
+        ],
+        "start": "n1",
+        "nodes": {
+            "n1": {
+                "text": "M. Renard reste debout près de la porte, son dossier serré sous le bras. Il regarde autour de lui sans rien dire.",
+                "choices": [
+                    { "text": "Je me lève, je lui propose une chaise et je lui demande ce qui l'amène.", "points": 10, "feedback": "Bien vu : il se sent attendu et il peut parler à son rythme.", "next": "n2" },
+                    { "text": "Je lui tends directement une fiche à remplir.", "points": 5, "feedback": "La fiche sera utile, mais plus tard : pour l'instant, il n'a encore rien pu dire.", "next": "n2" },
+                    { "text": "Je lui demande de revenir avec un rendez-vous.", "points": 0, "feedback": "Il repart sans réponse, alors qu'une minute d'écoute aurait suffi à l'orienter.", "next": "n1r" }
+                ]
+            },
+            "n1r": {
+                "text": "M. Renard hésite, puis se dirige vers la sortie. Vous avez encore une chance de le retenir.",
+                "choices": [
+                    { "text": "Je le rejoins et je lui propose de s'asseoir deux minutes.", "points": 5, "feedback": "Rattrapé à temps : il accepte de rester un instant.", "next": "n2" },
+                    { "text": "Je lui donne le numéro de téléphone de l'association.", "points": 0, "feedback": "Un numéro ne remplace pas un premier échange, mais il accepte tout de même de rester.", "next": "n2" }
+                ]
+            },
+            "n2": {
+                "text": "Il explique que son entreprise a déménagé et qu'il n'a plus de voiture. Il semble inquiet.",
+                "choices": [
+                    { "text": "Je résume ce que j'ai compris et je lui demande si c'est bien cela.", "points": 10, "feedback": "Parfait : il peut corriger et il voit que vous l'avez écouté.", "next": "n3" },
+                    { "text": "Je note tout sans rien dire.", "points": 5, "feedback": "Les notes sont utiles, mais il ne sait pas ce que vous avez retenu.", "next": "n3" },
+                    { "text": "Je lui parle tout de suite d'un poste à l'autre bout du département.", "points": 0, "feedback": "Sans voiture, ce poste est hors de portée : la règle des trente minutes aurait évité cette erreur.", "next": "n3" }
+                ]
+            },
+            "n3": {
+                "text": "M. Renard se détend. Il vous demande ce qui va se passer maintenant.",
+                "choices": [
+                    { "text": "Nous remplissons la fiche d'accueil ensemble et je lui indique son prochain rendez-vous.", "points": 10, "feedback": "Il repart en sachant exactement ce qui est écrit et ce qui l'attend.", "next": "end" },
+                    { "text": "Je lui donne une pile de brochures.", "points": 5, "feedback": "Les brochures peuvent aider, mais il repart sans date ni interlocuteur.", "next": "end" },
+                    { "text": "Je lui dis que quelqu'un le rappellera peut-être.", "points": 0, "feedback": "Un « peut-être » laisse la personne dans l'incertitude.", "next": "end" }
+                ]
+            }
+        }
+    },
+    {
+        "id": "scenario-2",
+        "image": "assets/scenarios/scenario-2.png",
+        "title": "Inès et l'atelier de vélos",
+        "personaName": "Inès",
+        "situation": "Inès, 20 ans, aimerait travailler avec des vélos, mais l'idée d'entrer dans un atelier l'intimide. Elle vient avec son carnet de route.",
+        "objectives": ["Rendre le projet accessible", "Laisser Inès décider", "Réagir sans juger quand ça coince"],
+        "recommendations": [
+            { "module": "2 MODULE - Le carnet de route", "reason": "Pour revoir le découpage en petits pas." }
+        ],
+        "start": "n1",
+        "nodes": {
+            "n1": {
+                "text": "Inès pose son carnet sur la table : « J'aimerais travailler avec des vélos, mais je n'oserai jamais entrer dans un atelier. »",
+                "choices": [
+                    { "text": "Je lui propose de découper cette démarche en trois petits pas.", "points": 10, "feedback": "Un grand objectif devient une suite d'actions à sa portée.", "next": "n2" },
+                    { "text": "Je propose d'appeler l'atelier à sa place.", "points": 5, "feedback": "C'est rassurant sur le moment, mais Inès ne gagne pas en confiance.", "next": "n2" },
+                    { "text": "Je lui dis qu'il suffit d'y aller, que ce n'est pas difficile.", "points": 0, "feedback": "Minimiser sa peur ne l'aide pas à la dépasser.", "next": "n2" }
+                ]
+            },
+            "n2": {
+                "text": "Inès choisit de lire les horaires de l'atelier cette semaine, mais elle craint d'oublier.",
+                "choices": [
+                    { "text": "Je l'invite à l'écrire dans son carnet comme prochaine action.", "points": 10, "feedback": "C'est son carnet et c'est sa décision : elle reste aux commandes.", "next": "n3" },
+                    { "text": "Je lui envoie un long message avec dix conseils.", "points": 5, "feedback": "Dix conseils noient la seule action qui compte cette semaine.", "next": "n3" },
+                    { "text": "Je l'écris dans mon dossier sans lui en parler.", "points": 0, "feedback": "Inès doit savoir ce qui est écrit et garder la main sur son projet.", "next": "n3" }
+                ]
+            },
+            "n3": {
+                "text": "Une semaine plus tard, Inès revient : elle n'a pas osé passer devant l'atelier.",
+                "choices": [
+                    { "text": "Nous redécoupons le pas pour le rendre encore plus simple.", "points": 10, "feedback": "On ne parle pas d'échec : on ajuste la marche à franchir.", "next": "end" },
+                    { "text": "Nous reportons le sujet au mois prochain.", "points": 5, "feedback": "Attendre évite la gêne, mais fait perdre l'élan.", "next": "end" },
+                    { "text": "Je lui dis que ce métier n'est peut-être pas pour elle.", "points": 0, "feedback": "Un pas manqué ne dit rien de ses capacités.", "next": "end" }
+                ]
+            }
+        }
+    },
+    {
+        "id": "scenario-3",
+        "image": "assets/scenarios/scenario-3.png",
+        "title": "Un appel au garage Moreau",
+        "personaName": "Mme Moreau",
+        "situation": "Le garage Moreau vient d'ouvrir un second atelier. Vous appelez sa gérante pour la première fois, entre deux clients.",
+        "objectives": ["Respecter le temps de l'employeur", "Comprendre son besoin", "Garder une trace de l'échange"],
+        "recommendations": [
+            { "module": "4 MODULE - Les voisins qui embauchent", "reason": "Pour revoir le coup de fil de Nadia." }
+        ],
+        "start": "n1",
+        "nodes": {
+            "n1": {
+                "text": "Mme Moreau décroche, on entend des outils derrière elle : « Oui, c'est pour quoi ? Je n'ai pas beaucoup de temps. »",
+                "choices": [
+                    { "text": "Je me présente et j'annonce que l'appel durera deux minutes.", "points": 10, "feedback": "Elle sait à quoi s'attendre et accepte de vous écouter.", "next": "n2" },
+                    { "text": "Je lui propose tout de suite un candidat.", "points": 5, "feedback": "C'est aller vite : vous ne connaissez pas encore son besoin.", "next": "n2" },
+                    { "text": "Je lui présente toute l'histoire de l'association.", "points": 0, "feedback": "Elle a déjà un client qui l'attend : l'essentiel doit tenir en une phrase.", "next": "n2" }
+                ]
+            },
+            "n2": {
+                "text": "« Deux minutes, d'accord. Qu'est-ce que vous voulez savoir ? »",
+                "choices": [
+                    { "text": "Je lui demande quelle tâche l'occupe le plus en ce moment.", "points": 10, "feedback": "Une question ouverte l'invite à parler de son besoin réel.", "next": "n3" },
+                    { "text": "Je lui demande si elle a un poste ouvert.", "points": 5, "feedback": "La réponse risque d'être non, alors qu'un besoin existe peut-être.", "next": "n3" },
+                    { "text": "Je lui explique les avantages de travailler avec nous.", "points": 0, "feedback": "Vous parlez de vous alors que vous cherchez à la comprendre.", "next": "n3" }
+                ]
+            },
+            "n3": {
+                "text": "« Je passe mes soirées à répondre au téléphone. Il me faudrait quelqu'un à l'accueil. »",
+                "choices": [
+                    { "text": "Je propose de passer la voir et je note tout dans la fiche entreprise.", "points": 10, "feedback": "Une suite concrète, et toute l'équipe gardera la trace de l'échange.", "next": "end" },
+                    { "text": "Je la remercie et je raccroche sans convenir de suite.", "points": 5, "feedback": "Le contact est bon, mais rien n'est prévu pour la suite.", "next": "end" },
+                    { "text": "Je promets de lui envoyer un candidat dès demain.", "points": 0, "feedback": "Une promesse intenable abîme la confiance dès le premier appel.", "next": "end" }
+                ]
+            }
+        }
+    }
+]

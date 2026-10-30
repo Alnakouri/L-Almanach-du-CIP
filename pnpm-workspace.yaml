@@ -1,0 +1,15 @@
+# Home des reglages pnpm depuis pnpm 11 (le champ "pnpm" de package.json n'est plus lu).
+
+# Aucun script d'installation autorise. Chaque paquet qui en a un doit etre liste ici avec
+# une valeur explicite, sinon `pnpm install` sort en erreur (ERR_PNPM_IGNORED_BUILDS).
+# Electron n'est pas concerne : il telecharge son binaire au premier lancement.
+allowBuilds:
+  onnxruntime-node: false
+  protobufjs: false
+  sharp: false
+overrides:
+  # GHSA-6gmq-8vp8-gcm6 — injection de fragment XML dans @xmldom/xmldom <=0.9.11.
+  # Chemin transitif : @electron/packager > plist > @xmldom/xmldom. plist epingle une
+  # plage vulnerable et @electron/packager 20.3.0 est deja la derniere version, donc
+  # pas de correctif en amont : on force la version corrigee ici.
+  '@xmldom/xmldom': '>=0.9.12'

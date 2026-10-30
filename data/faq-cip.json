@@ -1,0 +1,26 @@
+[
+    {
+        "id": "maison-horizon",
+        "question": "Qu'est-ce que la Maison Horizon ?",
+        "answer": "La Maison Horizon est une association imaginaire, inventée pour cette démonstration. Elle se trouve à Valbourg, une ville qui n'existe pas. Nadia, Inès, Karim et les autres personnages sont fictifs.",
+        "sources": ["La matinée de Nadia"]
+    },
+    {
+        "id": "carnet-route",
+        "question": "À quoi sert le carnet de route ?",
+        "answer": "Le carnet de route appartient à la personne : elle y note ses idées et choisit une seule prochaine action à chaque rendez-vous. En le relisant, elle repère les mots qui reviennent et fait émerger une piste.",
+        "sources": ["Inès ouvre son carnet"]
+    },
+    {
+        "id": "atelier-jeudi",
+        "question": "Comment se passe l'atelier du jeudi ?",
+        "answer": "Nadia prépare un déroulé sur une seule feuille et dispose les chaises en cercle. Un tour de table lance la séance, l'entraînement se fait en binômes et chacun écrit ce qu'il garde et ce qu'il changerait.",
+        "sources": ["Préparer la salle et le déroulé", "Quand le groupe se tait"]
+    },
+    {
+        "id": "message-piege",
+        "question": "Que faire devant un message piégé ?",
+        "answer": "Ne pas cliquer sur le lien, montrer le message à ses collègues et appeler le prestataire avec un numéro déjà connu. L'équipe de la Maison Horizon utilise aussi des phrases de passe pour protéger ses comptes.",
+        "sources": ["La phrase de passe de la Maison Horizon"]
+    }
+]

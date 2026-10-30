@@ -1,0 +1,66 @@
+# Dépendances
+node_modules/
+
+# Builds Electron
+dist/
+out/
+
+# Modèles lourds — distribués via Releases / téléchargés séparément (voir README)
+# Qwen 1.5B CIP (~1,8 Go) + Supertonic 3 (~340 Mo, fichier 245 Mo > limite GitHub 100 Mo)
+models/
+assets/models/
+*.onnx
+*.onnx_data
+*.onnx.data
+*.gguf
+*.bin
+
+# Secrets (ne jamais committer)
+.env
+.env.*
+*.key
+*.pem
+
+# Caches & runtime
+.cache/
+*.log
+
+# Supports de cours bruts (sources PDF/Office non incluses — droits tiers, chemins longs)
+# L'app fonctionne sur data/content/*.json + assets/, pas sur ces fichiers.
+*MODULE*/
+# Exception : `js/modules/` (modules de CODE de l'app) était happé par `*MODULE*/` à cause
+# de core.ignorecase sur Windows → dossier entier jamais suivi. On le ré-inclut explicitement
+# (les 23 dossiers de cours bruts « N MODULE - … » à la racine restent ignorés).
+!js/modules/
+!js/modules/**
+# Exceptions : visuels d'app (AI-générés, décoratifs, distribuables) happés par `*MODULE*/`
+# via core.ignorecase — recompressés en background-image légers. Les 23 dossiers de cours
+# bruts racine « N MODULE - … » (PDF, droits tiers) restent ignorés.
+!assets/modules/
+!assets/modules/**
+!assets/sub-modules/
+!assets/sub-modules/**
+Programme/
+*.pdf
+*.pptx
+*.ppt
+*.docx
+*.doc
+
+# Outils locaux (graphe de code Graphify, configuration MemPalace)
+graphify-out/
+mempalace.yaml
+
+# Artefacts de travail (plan d'exécution régénéré à chaque session)
+PLAN_EXECUTION.md
+PLAN_V4_EVOLUTION.md
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+
+prochaine feature.md

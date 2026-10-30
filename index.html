@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <!-- v9.20.0 : Content-Security-Policy 100 % locale (Piper vendored → plus aucun host CDN).
+         NE PAS resserrer/élargir sans smoke-test (Supertonic, Piper, export PDF, chat). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-src 'none'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="L'Almanach du CIP - Votre plateforme d'apprentissage premium pour la formation de Conseiller en Insertion Professionnelle.">
+    <title>L'Almanach du CIP</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="stylesheet" href="css/style.css?v=9.32.0">
+    <script src="js/lib/minisearch.min.js"></script>
+    <script src="js/lib/jspdf.umd.min.js"></script>
+    <!-- v7.0.3 : ORT est chargé en lazy par supertonic-helper.js > ensureOrt()
+         lors de la première synth Supertonic. Aucune dépendance globale à window.ort
+         requise au boot. -->
+    <link rel="stylesheet" href="css/fonts/outfit.css">
+</head>
+<body class="dark-theme">
+    <div class="background-glow"></div>
+    
+    <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">CIP</div>
+            <h1>L'Almanach</h1>
+        </div>
+        <nav class="module-nav" id="moduleNav">
+            <!-- Navigation will be populated by JS -->
+            <div class="loading-shimmer"></div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="search-container">
+                <input type="text" placeholder="Rechercher un module, un concept..." id="searchInput">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="user-controls">
+                <button id="toggleSidebar" class="btn-icon btn-icon-mobile-only" title="Menu modules" aria-label="Ouvrir le menu des modules" aria-expanded="false">☰<span class="btn-label">Menu</span></button>
+                <button id="downloadNotes" class="btn-icon" title="Exporter mes notes" aria-label="Exporter mes notes">📝<span class="btn-label">Notes</span></button>
+                <button id="installBtn" class="btn-primary hidden" style="margin-right: 15px; padding: 8px 15px; font-size: 0.8rem;">📥 Installer l'App</button>
+                <button class="btn-icon" title="Mes Badges" aria-label="Mes badges et succès" id="btnBadges">🏆<span class="btn-label">Badges</span></button>
+                <button class="btn-icon" title="Récemment consulté" aria-label="Récemment consulté" id="btnHistory">⏱️<span class="btn-label">Historique</span></button>
+                <button class="btn-icon" title="Mode Examen CIP" aria-label="Mode Examen CIP" id="btnExamMode">🎓<span class="btn-label">Examen</span></button>
+                <button class="btn-icon" title="Quiz général sur toute la matière" aria-label="Quiz général sur toute la matière" id="btnQuizGlobal">🧠<span class="btn-label">Quiz</span></button>
+                <button class="btn-icon" title="Glossaire CIP" aria-label="Glossaire CIP" id="btnGlossaire">📖<span class="btn-label">Glossaire</span></button>
+                <button class="btn-icon" title="Aide / Tuto" aria-label="Aide et tutoriel" id="btnHelp">❓<span class="btn-label">Aide</span></button>
+                <button class="btn-icon" title="Signaler un souci" aria-label="Signaler un problème" id="btnReport">🐞<span class="btn-label">Signaler</span></button>
+                <button class="btn-icon" title="Simulation Lab" aria-label="Laboratoire de simulation" id="btnLab">🧪<span class="btn-label">Simul.</span></button>
+                <button class="btn-icon" title="État Système" aria-label="Diagnostic système" id="btnSystem">📊<span class="btn-label">Système</span></button>
+                <button class="btn-icon" title="Favoris" aria-label="Mes favoris" id="btnFavorites">⭐<span class="btn-label">Favoris</span></button>
+                <button class="btn-icon" title="Paramètres" aria-label="Réglages de l'application" id="btnSettings">⚙️<span class="btn-label">Réglages</span></button>
+            </div>
+        </header>
+
+        <section class="dashboard-hero">
+            <div class="hero-text">
+                <h2 id="currentModuleName">Bienvenue dans votre Almanach</h2>
+                <p id="currentModuleSubtitle">Sélectionnez un module pour commencer votre apprentissage.</p>
+            </div>
+            <div class="progress-card glass">
+                <div class="progress-info">
+                    <span>Progression globale</span>
+                    <span class="percent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- v9.0.0 : carte Coach (rendue par js/modules/coach.js) -->
+        <section id="coachCard" class="glass coach-card hidden" aria-label="Coach de révision"></section>
+
+        <!-- v9.25.0 : plan de révision du jour (rendu par js/modules/pedago.js) -->
+        <section id="dailyPlanCard" class="glass daily-plan-card hidden" aria-label="Plan de révision du jour"></section>
+
+        <!-- Ancien dashboardStats vidé : les cartes sont maintenant dans statsView. -->
+        <section id="dashboardStats" class="dashboard-stats hidden" aria-hidden="true"></section>
+
+        <!-- Nouvelle vue Stats (v6.9.2-stats) -->
+        <section id="statsView" class="stats-view hidden" aria-label="Mes statistiques">
+            <div class="stats-header">
+                <button id="btnStatsBack" class="btn-nav stats-back-btn" aria-label="Retour à l'accueil">← Retour</button>
+                <h2 class="stats-title">📊 Mes statistiques</h2>
+                <div class="stats-spacer"></div>
+            </div>
+            <div class="stats-grid-full">
+                <div class="glass stat-card stat-card-ccp">
+                    <div class="stat-card-title">🎯 Progression par CCP</div>
+                    <div id="statsCcpProgress" class="ccp-progress-list-full"></div>
+                </div>
+                <div class="glass stat-card stat-card-readiness">
+                    <div class="stat-card-title">🎓 Préparation à l'examen</div>
+                    <div id="statsReadiness" class="readiness-list"></div>
+                </div>
+                <div class="glass stat-card">
+                    <div class="stat-card-title">📈 Activité (30 derniers jours)</div>
+                    <div id="activityHeatmap" class="activity-heatmap"></div>
+                </div>
+                <div class="glass stat-card">
+                    <div class="stat-card-title">🎯 Quiz à revoir</div>
+                    <div id="quizToReview" class="quiz-review-list"></div>
+                </div>
+                <div class="glass stat-card">
+                    <div class="stat-card-title">📚 Modules</div>
+                    <div id="modulesProgress" class="modules-progress-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <div id="ccpFilterBar" class="ccp-filter-bar hidden">
+            <button class="ccp-chip active" data-room="">Tout</button>
+            <button class="ccp-chip" data-room="ccp1">CCP1 · Accueil &amp; Diagnostic</button>
+            <button class="ccp-chip" data-room="ccp2">CCP2 · Accompagnement</button>
+            <button class="ccp-chip" data-room="ccp3">CCP3 · Employeurs</button>
+            <button class="ccp-chip" data-room="transversal">Transversal</button>
+        </div>
+        <div id="contentGrid" class="content-grid">
+            <!-- Cards will be populated by JS -->
+            <div class="welcome-message">
+                <h3>Prêt pour une session d'étude ?</h3>
+                <p>Naviguez dans les pôles de compétences pour accéder à vos guides et ressources CIP.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Reader Mode Overlay -->
+    <div id="bookViewer" class="reader-overlay hidden">
+        <div class="reader-topbar">
+            <div class="reader-breadcrumb">
+                <span id="readerModuleName">Module</span>
+                <span class="sep">›</span>
+                <span id="readerChapterName">Chapitre</span>
+            </div>
+            <div class="reader-actions">
+                <button id="toggleTOC" class="btn-reader btn-reader-mobile-only" title="Sommaire" aria-label="Afficher le sommaire" aria-expanded="false">📑 Sommaire</button>
+                <button id="toggleAudio" class="btn-reader" title="Lire à voix haute" aria-label="Lire à voix haute">🔊 Audio</button>
+                <button id="btnQuizIA" class="btn-reader" title="Générer un Quiz par IA" aria-label="Générer un quiz intelligent">🎯 Quiz IA</button>
+                <button id="showFlashcards" class="btn-reader" title="Extraire Flashcards" aria-label="Extraire les flashcards">🧠 Flashcards</button>
+                <button id="toggleView" class="btn-reader" title="Mode PDF" aria-label="Basculer en vue PDF">📄 PDF</button>
+                <div class="reader-font-controls" style="display:flex; align-items:center; gap:5px; margin:0 10px;">
+                    <button id="readerFontMinus" class="btn-reader" style="padding:4px 10px;" aria-label="Réduire la taille du texte">A-</button>
+                    <button id="readerFontPlus" class="btn-reader" style="padding:4px 10px;" aria-label="Augmenter la taille du texte">A+</button>
+                </div>
+                <label class="visually-hidden" for="readerTtsSpeed">Vitesse de lecture</label>
+                <select id="readerTtsSpeed" class="btn-reader" title="Vitesse de lecture" aria-label="Vitesse de lecture" style="cursor:pointer;">
+                    <option value="0.75">0.75x</option>
+                    <option value="0.95" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                </select>
+                <button id="closeBook" class="btn-reader btn-reader-close" title="Fermer" aria-label="Fermer le lecteur">✕</button>
+            </div>
+        </div>
+        <div class="reader-progress-bar"><div id="readerProgressFill" class="reader-progress-fill"></div></div>
+        <div class="reader-layout">
+            <div id="readerTOCBackdrop" class="reader-toc-backdrop"></div>
+            <nav id="readerTOC" class="reader-toc">                <!-- Table des matières générée par JS -->
+            </nav>
+            <article id="readerContent" class="reader-content">
+                <!-- Contenu généré par JS -->
+            </article>
+        </div>
+    </div>
+
+    <!-- Flashcards Modal -->
+    <div id="flashcardsModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 600px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3>Flashcards de révision</h3>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span id="flashCounter" style="font-size:0.75rem; opacity:0.5;"></span>
+                    <button id="closeFlashTop" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+                </div>
+            </div>
+            <div id="flashcardContent" class="flashcard-container">
+                <!-- Populated by JS -->
+            </div>
+            <!-- Zone de réponse utilisateur -->
+            <div id="flashAnswerZone" style="margin-top:15px;">
+                <textarea id="flashUserAnswer"
+                    placeholder="Écrivez votre réponse avant de retourner la carte..."
+                    style="width:100%; min-height:70px; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:10px; color:var(--text-primary); font-family:'Outfit',sans-serif; font-size:0.9rem; padding:12px; resize:none; outline:none; transition:border 0.2s;"></textarea>
+            </div>
+            <div class="book-nav" style="margin-top:12px;">
+                <button id="prevFlash" class="btn-nav">← Précédent</button>
+                <button id="flipFlash" class="btn-nav" style="background: var(--accent); color: white;">✔ Valider</button>
+                <button id="nextFlash" class="btn-nav">Suivant →</button>
+                <button id="closeFlash" class="btn-nav" style="background:rgba(255,255,255,0.1)">Fermer</button>
+            </div>
+            <!-- Verdict d'auto-correction injecté par reader.js (✅/❌ + bouton Suivante) -->
+            <div id="flashScore" class="hidden" style="display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div id="aiChat" class="ai-chat-widget hidden">
+        <div class="chat-header">
+            <span>🤖 Assistant CIP</span>
+            <button id="closeChat">✕</button>
+        </div>
+        <div id="chatMessages" class="chat-messages">
+            <div class="message system">Bonjour ! Je suis votre assistant. Comment puis-je vous aider dans vos révisions aujourd'hui ?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Posez une question...">
+            <button id="sendMsg">🚀</button>
+        </div>
+    </div>
+
+    <!-- Help / Onboarding Modal -->
+    <div id="helpModal" class="lab-overlay hidden">
+        <div class="lab-window" style="text-align: left; max-width: 600px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3>Bienvenue dans l'Almanach ! 📖</h3>
+                <button id="closeHelpTop" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <p style="margin: 20px 0; color: var(--text-secondary); line-height: 1.6;">
+                Voici comment tirer le meilleur parti de votre outil :
+            </p>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">🔍 <strong>Recherche</strong> : Tapez n'importe quel mot-clé pour trouver un document instantanément.</li>
+                <li style="margin-bottom: 15px;">🤖 <strong>Assistant IA</strong> : Utilisez le robot en bas à droite pour poser vos questions.</li>
+                <li style="margin-bottom: 15px;">🔊 <strong>Audio</strong> : Écoutez vos cours en cliquant sur l'icône haut-parleur dans le lecteur.</li>
+                <li style="margin-bottom: 15px;">⌨️ <strong>Raccourcis</strong> : <code>Échap</code> ferme, <code>↑↓</code> scroll dans le lecteur, <code>←→</code> scroll également.</li>
+                <li style="margin-bottom: 15px;">📥 <strong>Installation</strong> : Cliquez sur "Installer l'App" pour l'avoir sur votre bureau ou mobile sans connexion.</li>
+            </ul>
+            <button id="closeHelp" class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; border-radius: 10px; border: none; cursor: pointer;">J'ai compris, c'est parti !</button>
+        </div>
+    </div>
+
+    <!-- Report Modal (v9.15.0) -->
+    <div id="reportModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 560px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3>🐞 Signaler un souci</h3>
+                <button id="closeReportTop" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <p style="margin: 6px 0 16px; color: var(--text-secondary); line-height: 1.5; font-size:0.9rem;">
+                Décris le problème rencontré. Le signalement est enregistré directement dans l'app (dossier <b>Documents/Almanach-CIP</b>). La version de l'app et quelques infos techniques sont ajoutées automatiquement.
+            </p>
+            <label style="display:block; font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">Sujet</label>
+            <input id="reportSubject" type="text" placeholder="Ex : la lecture audio se bloque sur un chapitre" style="width:100%; padding:10px 12px; margin-bottom:14px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-primary); font-family:'Outfit',sans-serif; font-size:0.9rem;">
+            <label style="display:block; font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">Description</label>
+            <textarea id="reportBody" rows="6" placeholder="Que s'est-il passé ? Qu'attendais-tu ? Étapes pour reproduire…" style="width:100%; padding:10px 12px; margin-bottom:16px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-primary); font-family:'Outfit',sans-serif; font-size:0.9rem; resize:vertical;"></textarea>
+            <button id="reportSend" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; border: none; cursor: pointer;">💾 Enregistrer le signalement</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 500px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="color:var(--accent);">⏱️ Récemment consulté</h3>
+                <button id="closeHistory" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="historyList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+    </div>
+
+    <!-- Exam Mode Modal -->
+    <div id="examModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 700px; text-align: left; max-height: 85vh; overflow-y: auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2 style="color:var(--accent);">🎓 Mode Examen CIP — RNCP TP-00403</h2>
+                <button id="closeExam" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <!-- NEW v6.9.0 : Lanceur d'examen blanc -->
+            <div id="examLauncher" style="margin-bottom:25px; padding:20px; background:linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.10)); border-radius:16px; border:1px solid rgba(99,102,241,0.3);">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:15px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:240px;">
+                        <h3 style="margin:0 0 6px 0; color:var(--accent);">📝 Examen blanc complet</h3>
+                        <p style="margin:0; font-size:0.85rem; opacity:0.8; line-height:1.5;">
+                            Simulation officielle TP-00403 : <strong id="examLauncherCount">~45 questions</strong> tirées aléatoirement, distribuées sur les 3 CCP. Chrono global <strong>60 min</strong>. Note /20, seuil de réussite <strong>12/20</strong>.
+                        </p>
+                    </div>
+                    <button id="btnStartMockExam" class="btn-primary" style="padding:12px 22px; font-size:0.95rem; font-weight:700; white-space:nowrap;">
+                        🚀 Lancer
+                    </button>
+                </div>
+                <div id="examLauncherLastScore" style="margin-top:12px; font-size:0.8rem; opacity:0.7;"></div>
+            </div>
+            <hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0 0 20px 0;">
+            <h4 style="margin:0 0 12px 0; font-size:0.95rem; opacity:0.85;">📊 Auto-évaluation par CCP</h4>
+            <div id="examContent"></div>
+        </div>
+    </div>
+
+    <button id="fabChat" class="fab-chat" title="Assistant IA">🤖</button>
+
+    <!-- Exercises Modal (Phase 13) -->
+    <div id="exerciseModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 650px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="color:var(--accent);">🧩 Exercices par Compétence</h3>
+                <button id="closeExercise" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="exerciseSelector" class="content-grid" style="grid-template-columns: 1fr 1fr; gap:10px;">
+                <!-- Buttons per CP -->
+            </div>
+            <div id="exercisePlay" class="hidden">
+                <button id="backToEx" class="btn-nav" style="margin-bottom:15px; font-size:0.75rem;">← Retour</button>
+                <div class="glass" style="padding:20px; border-radius:15px;">
+                    <div id="exQuestion"></div>
+                    <div id="exOptions" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Lab Modal (Updated Phase 14) -->
+    <div id="labModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 style="color: var(--accent)">🧪 Simulateur d'Entretien CIP</h2>
+                <button id="closeLab" class="btn-icon" style="background: rgba(255,255,255,0.1)">✕</button>
+            </div>
+            
+            <div id="labWelcome" class="lab-content">
+                <p style="color:var(--text-secondary);">Mettez en pratique vos compétences en situation réelle face à des personnages virtuels.</p>
+                <div id="scenarioList" class="content-grid" style="grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;"></div>
+            </div>
+
+            <div id="scenarioView" class="lab-content hidden">
+                <div style="display:flex; gap:20px; height: 500px;">
+                    <!-- Character Profile -->
+                    <div style="width:250px; flex-shrink:0;" id="simProfile"></div>
+                    <!-- Conversation -->
+                    <div style="flex:1; display:flex; flex-direction:column; background:rgba(0,0,0,0.2); border-radius:15px; border:1px solid var(--glass-border); padding:20px;">
+                        <div id="simLog" style="flex:1; overflow-y:auto; padding-right:10px; margin-bottom:20px; display:flex; flex-direction:column; gap:15px;"></div>
+                        <div id="simChoices" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="simDebrief" class="lab-content hidden">
+                <!-- Final results -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="quizTitle">Quiz de révision</h3>
+                <div id="quizTimer" class="hidden" style="font-size:1.5rem; font-weight:800; color:var(--accent); background:rgba(255,255,255,0.05); padding:5px 15px; border-radius:10px;">60</div>
+                <div id="quizGlobalTimer" class="hidden" style="font-size:1.1rem; font-weight:700; color:var(--accent); background:rgba(99,102,241,0.15); padding:6px 14px; border-radius:10px; border:1px solid rgba(99,102,241,0.3);">
+                    ⏱ <span id="quizGlobalTimerValue">60:00</span>
+                </div>
+                <div id="quizProgressBadge" class="hidden" style="font-size:0.8rem; opacity:0.7; padding:4px 10px; background:rgba(255,255,255,0.05); border-radius:8px;">
+                    Q <span id="quizProgressIdx">1</span>/<span id="quizProgressTotal">45</span>
+                </div>
+                <button id="closeQuiz" class="btn-icon" style="background: rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="quizContainer" style="margin: 30px 0; text-align: left;">
+                <p id="quizQuestion" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 20px;"></p>
+                <div id="quizOptions" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+            <div id="quizResult" class="hidden" style="margin-bottom: 20px; padding: 20px; border-radius: 10px; background: rgba(16, 185, 129, 0.2);">
+                <p id="quizFeedback"></p>
+            </div>
+            <button id="nextQuiz" class="btn-primary" style="width: 100%;">Continuer</button>
+        </div>
+    </div>
+
+    <!-- System Diagnostic Modal -->
+    <div id="systemModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 450px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="color: var(--accent);">📊 Diagnostic Système IA</h3>
+                <button id="closeSystemTop" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <span style="display: block; font-size: 0.8rem; opacity: 0.6;">Système d'Exploitation</span>
+                    <strong id="sysOS" style="color: #6366f1;">Analyse...</strong>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <span style="display: block; font-size: 0.8rem; opacity: 0.6;">Moteur Détecté</span>
+                    <strong id="sysEngine" style="color: #10b981;">Analyse en cours...</strong>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <span style="display: block; font-size: 0.8rem; opacity: 0.6;">Statut Mémoire IA</span>
+                    <strong id="sysModel" style="color: var(--accent);">Vérification du disque F...</strong>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <span style="display: block; font-size: 0.8rem; opacity: 0.6;">Mode d'Exécution</span>
+                    <strong style="color: #f59e0b;">Portable & Autonome</strong>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; line-height: 1.4; opacity: 0.7;">
+                L'Almanach s'est automatiquement adapté à la puissance de ce PC pour garantir une fluidité maximale.
+            </p>
+            <!-- Sélecteur de Modèle -->
+            <div class="glass" style="padding:12px; border-radius:10px; margin-top:10px;">
+                <label style="font-size:0.75rem; opacity:0.6; display:block; margin-bottom:6px;">🤖 Modèle IA</label>
+                <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">Qwen 2.5 1.5B <strong style="color:var(--accent);">CIP</strong> — fine-tuné sur la formation CIP, intégré et hors-ligne (~900 Mo).</p>
+            </div>
+
+            <div id="aiInstallBlock" style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+                <button id="btnInstallAI" class="btn-primary" style="width:100%; background: linear-gradient(135deg,#6366f1,#8b5cf6);">
+                    🤖 Télécharger ce modèle
+                </button>
+                <button id="btnClearAICache" style="width:100%; padding:8px; background:rgba(244,63,94,0.15); border:1px solid rgba(244,63,94,0.3); border-radius:8px; color:#f43f5e; cursor:pointer; font-family:'Outfit',sans-serif; font-size:0.8rem;">
+                    🗑️ Vider le cache IA (réinstaller)
+                </button>
+                <div id="aiInstallProgress" class="hidden" style="margin-top:4px;">
+                    <div style="height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
+                        <div id="aiProgressBar" style="height:100%; width:0%; background:var(--accent); border-radius:3px; transition:width 0.3s;"></div>
+                    </div>
+                    <p id="aiProgressLabel" style="font-size:0.75rem; opacity:0.6; margin-top:5px; text-align:center;">Démarrage du téléchargement...</p>
+                </div>
+            </div>
+            <button id="btnCopyDiag" class="btn-primary" style="width: 100%; margin-top: 10px;">📋 Copier le diagnostic</button>
+            <button id="closeSystem" class="btn-primary" style="width: 100%; margin-top: 10px; background:rgba(255,255,255,0.1);">Fermer</button>
+        </div>
+    </div>
+
+    <!-- Favorites Modal -->
+    <div id="favoritesModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 500px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: var(--accent);">⭐ Mes Favoris</h3>
+                <button id="closeFavorites" class="btn-icon" style="background: rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="favoritesList" style="display: flex; flex-direction: column; gap: 10px;">
+                <p style="color: var(--text-secondary);">Aucun favori pour le moment. Cliquez sur ⭐ dans un module pour l'ajouter.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 500px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: var(--accent);">⚙️ Paramètres</h3>
+                <button id="closeSettings" class="btn-icon" style="background: rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+
+
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <span>🌗 Thème de lecture</span>
+                        <select id="settingTheme" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px;">
+                            <option value="dark" selected>Sombre</option>
+                            <option value="sepia">Sépia (confort)</option>
+                            <option value="light">Clair</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>⚡ Vitesse de lecture</span>
+                        <select id="settingTtsRate" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px;">
+                            <option value="0.85">0.85× (lent)</option>
+                            <option value="1.0" selected>1.0× (normal)</option>
+                            <option value="1.15">1.15×</option>
+                            <option value="1.3">1.3× (rapide)</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; flex-direction: column; gap: 8px; cursor: pointer;">
+                        <span>🎙️ Voix de secours (système)</span>
+                        <select id="settingVoice" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px; width: 100%;">
+                            <option value="">Automatique (meilleure voix détectée)</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <div style="font-weight:600; margin-bottom:10px;">🎭 Voix simulations (multi-moteurs v6.9.2)</div>
+
+                    <div id="ttsHardwareReport" style="font-size:0.72rem; opacity:0.65; margin-bottom:10px; padding:6px 10px; background:rgba(255,255,255,0.04); border-radius:6px;">
+                        Détection matérielle en cours…
+                    </div>
+
+                    <label style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+                        <span style="font-size:0.85rem;">📖 Voix de lecture (chapitres)</span>
+                        <select id="settingTtsVoiceReader" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px; width:100%;">
+                            <option value="">Auto (recommandé)</option>
+                        </select>
+                        <button id="testTtsVoiceReader" style="font-size:0.75rem; padding:4px 8px; background:rgba(255,255,255,0.08); border:1px solid var(--glass-border); border-radius:6px; color:white; cursor:pointer; align-self:flex-start;">▶ Tester voix lecture</button>
+                    </label>
+
+                    <!-- v7.1.0 : cache disque Supertonic -->
+                    <div id="supertonicCacheInfoBlock" style="display:none; flex-direction:column; gap:6px; margin-bottom:10px; padding:8px; background:rgba(34,197,94,0.06); border-radius:8px;">
+                        <span style="font-size:0.85rem;">💾 Cache Supertonic : <span id="supertonicCacheInfoText">…</span></span>
+                        <button id="supertonicCacheClearBtn" style="font-size:0.75rem; padding:4px 8px; background:rgba(255,100,100,0.15); border:1px solid var(--glass-border); border-radius:6px; color:white; cursor:pointer; align-self:flex-start;">🗑️ Vider le cache</button>
+                    </div>
+
+                    <label style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+                        <span style="font-size:0.85rem;">👤 Voix Personnage (candidat)</span>
+                        <select id="settingTtsVoicePersona" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px; width:100%;">
+                            <option value="">Auto (recommandé)</option>
+                        </select>
+                    </label>
+
+                    <label style="display:flex; flex-direction:column; gap:6px;">
+                        <span style="font-size:0.85rem;">🎓 Voix CIP (conseiller)</span>
+                        <select id="settingTtsVoiceCip" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px; width:100%;">
+                            <option value="">Auto (recommandé)</option>
+                        </select>
+                    </label>
+
+                    <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                        <button id="testTtsVoicePersona" class="btn-nav" style="font-size:0.78rem; padding:4px 10px;">▶ Tester Personnage</button>
+                        <button id="testTtsVoiceCip" class="btn-nav" style="font-size:0.78rem; padding:4px 10px;">▶ Tester CIP</button>
+                    </div>
+
+                    <div id="ttsDownloadStatus" style="margin-top:10px; font-size:0.72rem; opacity:0.7;"></div>
+                    <!-- v6.9.6 : indicateur live engine actif -->
+                    <div id="ttsActiveEngine" style="margin-top:8px; font-size:0.75rem; padding:6px 10px; background:rgba(255,255,255,0.04); border-radius:6px; opacity:0.85;">
+                        Moteur actif : <span id="ttsActiveEngineValue" style="font-weight:600; color:var(--accent);">—</span>
+                    </div>
+
+                    <details style="margin-top:10px; font-size:0.72rem; opacity:0.6;">
+                        <summary style="cursor:pointer;">ℹ️ Comment ça marche</summary>
+                        <div style="margin-top:6px; line-height:1.5;">
+                            <strong>3 moteurs possibles :</strong>
+                            <ul style="margin-top:4px; padding-left:20px;">
+                                <li><strong>Web Speech</strong> : voix système (Microsoft/Google), instantané, qualité variable</li>
+                                <li><strong>Piper FR</strong> : neural local, multi-voix (Tom m, Siwis f, etc.), ~64 MB par voix opt-in</li>
+                                <li><strong>Supertonic 3</strong> (v7.0.0-beta-2) : neural ONNX in-browser, 10 voix multi-langues, tags expressifs, opt-in ~380 MB</li>
+                            </ul>
+                            Piper télécharge ses modèles à la 1ère utilisation puis cache offline. Supertonic 3 charge ONNX vendored + 380 MB d'assets bundlés (opt-in).
+                        </div>
+                    </details>
+
+                    <!-- v7.0.0-beta-2 : bandeau activation Supertonic 3, affiché conditionnellement par app.js -->
+                    <div id="supertonicActivationBanner" class="hidden" style="margin-top:10px; padding:10px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); border-radius:8px; font-size:0.78rem;">
+                        <div style="font-weight:600; margin-bottom:4px;">🚀 Supertonic 3 disponible</div>
+                        <div style="opacity:0.85; margin-bottom:8px;">TTS neural on-device (multi-langues, tags &lt;laugh&gt;/&lt;breath&gt;/&lt;sigh&gt;). 380 MB ONNX déjà sur disque, premier chargement ~10s.</div>
+                        <div id="supertonicSuitabilityWarn" style="font-size:0.75rem; margin-bottom:8px;"></div>
+                        <button id="supertonicActivateBtn" class="btn-nav" style="font-size:0.78rem; padding:4px 10px;">🚀 Activer Supertonic 3</button>
+                        <span id="supertonicActivationStatus" style="margin-left:8px; opacity:0.7;"></span>
+                        <div id="supertonicExpressiveTestRow" style="margin-top:8px; display:none;">
+                            <button type="button" id="supertonicTestExpressiveBtn" class="btn btn-secondary" style="font-size:0.9em; padding:6px 10px;">
+                                🎭 Tester tags expressifs (laugh / breath / sigh)
+                            </button>
+                            <span id="supertonicTestExpressiveStatus" style="margin-left:8px; opacity:0.7; font-size:0.85em;"></span>
+                        </div>
+                        <!-- v7.0.9 : sélecteur de langue Supertonic (31 langues supportées) -->
+                        <div id="supertonicLangRow" style="margin-top:8px; display:none;">
+                            <label for="settingSupertonicLang" style="font-size:0.85em; margin-right:6px;">🌐 Langue de synthèse :</label>
+                            <select id="settingSupertonicLang" style="background:rgba(255,255,255,0.1); color:white; border:1px solid var(--glass-border); border-radius:6px; padding:3px 8px; font-size:0.85em;">
+                                <option value="fr">Français (fr)</option>
+                                <option value="en">English (en)</option>
+                                <option value="de">Deutsch (de)</option>
+                                <option value="es">Español (es)</option>
+                                <option value="it">Italiano (it)</option>
+                                <option value="pt">Português (pt)</option>
+                                <option value="nl">Nederlands (nl)</option>
+                                <option value="pl">Polski (pl)</option>
+                                <option value="ru">Русский (ru)</option>
+                                <option value="uk">Українська (uk)</option>
+                                <option value="cs">Čeština (cs)</option>
+                                <option value="sk">Slovenčina (sk)</option>
+                                <option value="hu">Magyar (hu)</option>
+                                <option value="ro">Română (ro)</option>
+                                <option value="bg">Български (bg)</option>
+                                <option value="hr">Hrvatski (hr)</option>
+                                <option value="sl">Slovenščina (sl)</option>
+                                <option value="el">Ελληνικά (el)</option>
+                                <option value="tr">Türkçe (tr)</option>
+                                <option value="ar">العربية (ar)</option>
+                                <option value="hi">हिन्दी (hi)</option>
+                                <option value="ja">日本語 (ja)</option>
+                                <option value="ko">한국어 (ko)</option>
+                                <option value="vi">Tiếng Việt (vi)</option>
+                                <option value="id">Bahasa Indonesia (id)</option>
+                                <option value="da">Dansk (da)</option>
+                                <option value="sv">Svenska (sv)</option>
+                                <option value="fi">Suomi (fi)</option>
+                                <option value="et">Eesti (et)</option>
+                                <option value="lv">Latviešu (lv)</option>
+                                <option value="lt">Lietuvių (lt)</option>
+                            </select>
+                            <span id="supertonicLangStatus" style="margin-left:8px; opacity:0.7; font-size:0.85em;"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <span>🌗 Thème de lecture</span>
+                        <select id="settingTheme" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px;">
+                            <option value="dark" selected>Sombre</option>
+                            <option value="sepia">Sépia (confort)</option>
+                            <option value="light">Clair</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <span>🔤 Taille du texte (lecteur)</span>
+                        <select id="settingFontSize" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px;">
+                            <option value="1rem">Petit</option>
+                            <option value="1.2rem" selected>Normal</option>
+                            <option value="1.5rem">Grand</option>
+                        </select>
+                    </label>
+                </div>
+                <button id="resetProgress" class="btn-primary" style="background: #f43f5e; margin-top: 10px;">🗑️ Réinitialiser ma progression</button>
+
+                <!-- Séparateur -->
+                <div style="height:1px; background:var(--glass-border); margin:5px 0;"></div>
+
+                <!-- Reset flashcards SM2 -->
+                <button id="resetSM2" class="btn-primary" style="background:rgba(245,158,11,0.2); border:1px solid rgba(245,158,11,0.3); color:#f59e0b; margin-top:5px;">
+                    🧠 Réinitialiser les flashcards (SM2)
+                </button>
+
+                <!-- Taille de police globale -->
+                <div class="glass" style="padding: 15px; border-radius: 10px;">
+                    <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <span>🔤 Taille du texte (interface)</span>
+                        <select id="settingGlobalFontSize" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); border-radius: 8px; padding: 5px 10px;">
+                            <option value="14px">Petit (14px)</option>
+                            <option value="16px" selected>Normal (16px)</option>
+                            <option value="18px">Grand (18px)</option>
+                            <option value="20px">Très grand (20px)</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div style="height:1px; background:var(--glass-border); margin:5px 0;"></div>
+
+                <!-- Export données -->
+                <button id="exportAllData" class="btn-primary" style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.3); color:#10b981; margin-top:5px;">
+                    📤 Exporter mes notes & progression (JSON)
+                </button>
+                <button id="exportPDF" class="btn-primary" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; margin-top:5px;">
+                    📄 Exporter mes notes & scores (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glossaire Modal -->
+    <div id="glossaireModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width:620px; text-align:left; max-height:82vh; display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-shrink:0;">
+                <h3 style="color:var(--accent);">📖 Glossaire CIP</h3>
+                <button id="closeGlossaire" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <input type="text" id="glossaireSearch" placeholder="Rechercher un terme (ex: carnet, atelier, binôme...)"
+                style="width:100%; padding:10px 15px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:10px; color:var(--text-primary); font-family:'Outfit',sans-serif; font-size:0.9rem; margin-bottom:15px; outline:none; flex-shrink:0;">
+            <div id="glossaireList" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:10px; padding-right:4px;"></div>
+        </div>
+    </div>
+
+    <!-- Note Viewer Modal (v6.7) -->
+    <div id="noteModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 600px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 id="noteModalTitle" style="color:var(--accent);">📝 Ma Note</h3>
+                <button id="closeNote" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="noteModalBody" class="reader-section-body" style="font-size:1rem; line-height:1.6; color:var(--text-primary); max-height:60vh; overflow-y:auto; padding-right:10px;">
+                <!-- Content via marked.js -->
+            </div>
+            <button id="closeNoteBtn" class="btn-primary" style="width: 100%; margin-top: 25px;">Fermer</button>
+        </div>
+    </div>
+
+    <!-- Badges Modal -->
+    <div id="badgesModal" class="lab-overlay hidden">
+        <div class="lab-window" style="max-width: 650px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2 style="color:var(--accent);">🏆 Mes Badges & Succès</h2>
+                <button id="closeBadges" class="btn-icon" style="background:rgba(255,255,255,0.1)">✕</button>
+            </div>
+            <div id="badgesList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:15px;">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/lib/marked.min.js"></script>
+    <script src="js/data.js?v=9.32.0"></script>
+    <script src="js/modules/achievements.js?v=9.32.0"></script>
+    <script src="js/modules/stats-view.js?v=9.32.0"></script>
+    <script src="js/modules/simulation.js?v=9.32.0"></script>
+    <script src="js/modules/exam.js?v=9.32.0"></script>
+    <script src="js/modules/reader.js?v=9.32.0"></script>
+    <script src="js/modules/quiz-engine.js?v=9.32.0"></script>
+    <script src="js/modules/coach.js?v=9.32.0"></script>
+    <script src="js/modules/pedago.js?v=9.32.0"></script>
+    <script src="js/app.js?v=9.32.0"></script>
+    <script src="js/ai-helper.js?v=9.32.0"></script>
+</body>
+</html>

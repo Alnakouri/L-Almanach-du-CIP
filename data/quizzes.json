@@ -1,0 +1,74 @@
+[
+    {
+        "moduleId": 0,
+        "title": "Quiz : Arriver à la Maison Horizon",
+        "questions": [
+            { "q": "Que vérifie Nadia avant l'arrivée du premier visiteur ?", "options": ["Que la salle d'attente est rangée", "Que la mairie est ouverte", "Que l'atelier est complet", "Que le bus est à l'heure"], "a": 0 },
+            { "q": "Pourquoi Nadia ne note-t-elle rien pendant les deux premières minutes ?", "options": ["Elle n'a pas de stylo", "Elle veut d'abord écouter", "La fiche est perdue", "Le visiteur le lui interdit"], "a": 1 },
+            { "q": "À quoi sert le résumé à voix haute ?", "options": ["À gagner du temps", "À remplir la fiche seule", "À laisser l'autre corriger ce qu'on a compris", "À terminer l'échange"], "a": 2 },
+            { "q": "Comment la fiche d'accueil est-elle remplie ?", "options": ["Par Nadia, après le départ du visiteur", "Par le visiteur, seul", "Par un logiciel", "Avec le visiteur, à voix haute"], "a": 3 },
+            { "q": "Que donne l'étiquette de couleur d'un dossier ?", "options": ["La date du prochain rendez-vous", "L'âge du visiteur", "Le nom de l'atelier", "Le quartier d'habitation"], "a": 0 },
+            { "q": "Qu'écrit-on sur la feuille de sortie ?", "options": ["Le résumé du rendez-vous", "Le numéro du dossier et son nom", "La liste des ateliers", "La météo du jour"], "a": 1 }
+        ]
+    },
+    {
+        "moduleId": 1,
+        "title": "Quiz : Explorer Valbourg",
+        "questions": [
+            { "q": "Que fait l'équipe chaque semaine sur le plan de la ville ?", "options": ["Elle le décroche", "Elle y ajoute une punaise", "Elle en imprime une copie", "Elle l'envoie à la mairie"], "a": 1 },
+            { "q": "Quelle question la carte vivante aide-t-elle à résoudre ?", "options": ["Qui a le plus de rendez-vous ?", "Quel est le meilleur café ?", "Qu'est-ce qui existe à moins de trente minutes du domicile ?", "Combien coûte un plan ?"], "a": 2 },
+            { "q": "Que ramène-t-on de la promenade du vendredi ?", "options": ["Trois nouveautés à partager", "Un compte rendu de dix pages", "Des brochures à trier", "Une liste de candidats"], "a": 0 },
+            { "q": "Combien de temps dure une présentation au café des voisins ?", "options": ["Dix minutes", "Une demi-heure", "Cinq minutes", "Deux minutes"], "a": 3 },
+            { "q": "Quel bénéfice le café apporte-t-il à une personne qui cherche une crèche ?", "options": ["Elle obtient une place automatiquement", "Elle n'a pas à raconter son histoire cinq fois", "Elle participe au café", "Elle reçoit un plan de la ville"], "a": 1 },
+            { "q": "Quelle limite l'équipe respecte-t-elle pendant le café ?", "options": ["Aucun nom ne circule", "Personne ne boit de café", "Une seule structure parle", "Les portes restent fermées"], "a": 0 }
+        ]
+    },
+    {
+        "moduleId": 2,
+        "title": "Quiz : Le carnet de route",
+        "questions": [
+            { "q": "À qui appartient le carnet de route ?", "options": ["À l'association", "À Nadia", "À Inès", "À la mairie"], "a": 2 },
+            { "q": "Que choisissent Inès et Nadia à chaque rendez-vous ?", "options": ["Une seule prochaine action", "Dix objectifs", "Un nouveau carnet", "Une date d'embauche"], "a": 0 },
+            { "q": "Quel mot revient souvent dans le carnet d'Inès ?", "options": ["Voyager", "Réparer", "Vendre", "Cuisiner"], "a": 1 },
+            { "q": "Pourquoi Nadia découpe-t-elle le projet d'Inès en trois pas ?", "options": ["Pour gagner du papier", "Pour remplir une fiche", "Parce que le mécanicien l'exige", "Parce que l'idée d'entrer dans l'atelier l'intimide"], "a": 3 },
+            { "q": "Que fait-on quand un pas échoue ?", "options": ["On abandonne le projet", "On change de carnet", "On le redécoupe encore", "On attend un mois"], "a": 2 },
+            { "q": "Quel est le troisième pas d'Inès ?", "options": ["Regarder une vidéo", "Lire les horaires", "Acheter un vélo", "Entrer et poser une seule question"], "a": 3 }
+        ]
+    },
+    {
+        "moduleId": 3,
+        "title": "Quiz : L'atelier du jeudi",
+        "questions": [
+            { "q": "Comment Nadia dispose-t-elle les chaises ?", "options": ["En rangées", "En cercle", "Le long du mur", "Autour d'une grande table"], "a": 1 },
+            { "q": "Que contient le déroulé d'atelier ?", "options": ["Les étapes, leur durée et le matériel", "La liste des absents", "Le plan de la ville", "Les dossiers des participants"], "a": 0 },
+            { "q": "Pourquoi prévoir une marge de sécurité ?", "options": ["Pour accueillir plus de monde", "Pour commencer plus tard", "Pour retirer une partie si le temps manque", "Pour ajouter une pause café"], "a": 2 },
+            { "q": "Que propose Nadia quand le groupe se tait ?", "options": ["Un long monologue", "Une pause d'une heure", "De finir plus tôt", "Un tour de table très simple"], "a": 3 },
+            { "q": "Pourquoi former des binômes ?", "options": ["Il est plus facile de s'exprimer devant une seule personne", "Pour économiser des chaises", "Pour terminer plus vite", "Parce que la salle est trop petite"], "a": 0 },
+            { "q": "Que note Nadia dans son journal de bord ?", "options": ["Le nom des absents", "Une chose à refaire et une chose à modifier", "Les horaires du bus", "Les punaises de la carte"], "a": 1 }
+        ]
+    },
+    {
+        "moduleId": 4,
+        "title": "Quiz : Les voisins qui embauchent",
+        "questions": [
+            { "q": "Que fait Nadia avant d'appeler le garage ?", "options": ["Elle prépare ce qu'elle veut dire", "Elle envoie dix candidats", "Elle se rend au garage", "Elle consulte la météo"], "a": 0 },
+            { "q": "Que dit Nadia dès le début de l'appel ?", "options": ["Qu'elle a un candidat", "Que l'appel durera deux minutes", "Qu'elle rappellera plus tard", "Qu'elle cherche une voiture"], "a": 1 },
+            { "q": "Que cherche d'abord à comprendre Nadia ?", "options": ["Le prix des réparations", "Le nom des clients", "Le besoin de l'employeur", "L'âge du garage"], "a": 2 },
+            { "q": "Où Nadia note-t-elle ce qu'elle a appris ?", "options": ["Sur la carte vivante", "Dans le carnet de route", "Dans le journal de bord", "Dans la fiche entreprise"], "a": 3 },
+            { "q": "Qu'est-ce qui est le plus dur pour Karim ?", "options": ["Ne pas savoir à qui poser ses questions", "Le travail lui-même", "Les horaires", "Le trajet"], "a": 0 },
+            { "q": "Quel est le rôle de Julien ?", "options": ["Il recrute Karim", "Il est sa personne de référence pendant un mois", "Il remplace madame Moreau", "Il répare la voiture de Karim"], "a": 1 }
+        ]
+    },
+    {
+        "moduleId": 5,
+        "title": "Quiz : Ranger, protéger, partager",
+        "questions": [
+            { "q": "Que fait Nadia devant le message étrange ?", "options": ["Elle clique pour vérifier", "Elle le transfère à tout le quartier", "Elle appelle le prestataire avec un numéro connu", "Elle change d'ordinateur"], "a": 2 },
+            { "q": "De quoi une phrase de passe est-elle faite ?", "options": ["De quatre mots faciles à retenir", "De deux chiffres", "Du nom de l'association", "D'une date de naissance"], "a": 0 },
+            { "q": "Qui peut ouvrir les dossiers numériques ?", "options": ["Tout le monde", "Seulement les personnes qui en ont besoin", "Seulement les visiteurs", "Les structures voisines"], "a": 1 },
+            { "q": "Que devient un dossier une fois le suivi terminé ?", "options": ["Il est imprimé", "Il est publié", "Il est envoyé au garage", "Il est supprimé à la date prévue"], "a": 3 },
+            { "q": "Quelles sont les trois rubriques de la page partagée ?", "options": ["Décision, responsable, échéance", "Titre, image, signature", "Date, lieu, météo", "Nom, âge, adresse"], "a": 0 },
+            { "q": "Qu'a permis la page partagée en six mois ?", "options": ["De recruter dix personnes", "De doubler les réunions", "De diviser la consommation de papier par quatre", "D'ouvrir un second atelier"], "a": 2 }
+        ]
+    }
+]

@@ -1,0 +1,90 @@
+name: CI
+
+# Cette CI n'est pas décorative. Chaque étape garde un piège qui a DÉJÀ cassé ce projet :
+#  - la syntaxe : un PLAN exécuté par un agent peut livrer un fichier qui ne parse pas ;
+#  - les assets du Service Worker : un seul chemin en 404 fait échouer cache.addAll en
+#    bloc, et l'erreur ne sort que dans l'onglet Application, jamais dans la Console ;
+#  - le suivi git des sources : `.gitignore` a déjà avalé js/modules/ pendant des
+#    semaines, rendant le dépôt public non-buildable, invisible depuis le poste local ;
+#  - la cohérence de release : le bump de CACHE_NAME est l'oubli récurrent numéro un ;
+#  - les index RAG/vault : on les régénère ici, un diff = un index périmé committé.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:        # lancement à la main depuis l'onglet Actions
+
+jobs:
+  verifications:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # pnpm AVANT setup-node : `cache: pnpm` a besoin que le binaire existe déjà
+      # pour résoudre le chemin du store. La version vient du champ packageManager
+      # de package.json, seule source de vérité.
+      #
+      # v6 minimum : c'est la version qui a ajouté le support de pnpm v11, et le
+      # projet est sur pnpm 11.20.0.
+      - name: pnpm
+        uses: pnpm/action-setup@v6
+
+      # `cache: pnpm` reste explicite : depuis setup-node v5, la présence du champ
+      # packageManager déclenche un cache automatique. L'écrire noir sur blanc évite
+      # de dépendre d'une détection implicite pour une étape qui compte.
+      - name: Node 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Lockfile en phase avec package.json
+        # La même commande qu'un clone neuf : pas de --ignore-scripts, qui masquait un
+        # allowBuilds incomplet (ERR_PNPM_IGNORED_BUILDS). Aucun script ne tourne, et
+        # Electron ne télécharge son binaire qu'au premier lancement. --frozen-lockfile
+        # échoue si quelqu'un a touché package.json sans relancer pnpm install.
+        run: pnpm install --frozen-lockfile
+
+      - name: Syntaxe JS (CommonJS + modules ES)
+        run: node scripts/check-syntax.js
+
+      - name: Assets du Service Worker et de index.html
+        run: node scripts/check-assets.js
+
+      - name: Cohérence de release (version / build / cache SW / Electron)
+        run: node scripts/check-release-coherence.js
+
+      - name: Intégrité des données
+        run: node scripts/check-data-integrity.js
+
+      - name: Index vault à jour
+        # L'index vault est un artefact REGÉNÉRABLE committé dans le dépôt. S'il diverge de
+        # ses sources (js/data.js, data/faq-cip.json, data/vault), le RAG servira des
+        # entrées périmées sans que rien ne l'indique.
+        run: |
+          node scripts/build-vault-index.js
+          git diff --exit-code -- data/vault-index.json || {
+            echo "::error::index périmé — relancer pnpm run build-vault et committer le résultat"
+            exit 1
+          }
+
+      - name: Vulnérabilités connues
+        # GHSA-f88m-g3jw-g9cj (sharp < 0.35, via @huggingface/transformers) est mis en
+        # sourdine EN CONNAISSANCE DE CAUSE : l'app est du texte pur, aucun chemin de
+        # code n'atteint sharp, et le corriger imposerait la majeure transformers 4.x
+        # qui remettrait en jeu le réglage q4 / kv_cache_dtype du modèle fine-tuné.
+        # Toute AUTRE faille haute doit faire rougir cette étape.
+        #
+        # `pnpm audit --ignore` fait nativement le filtrage par avis que l'on écrivait
+        # à la main du temps de `npm audit` : on garde --audit-level=high plutôt que de
+        # le baisser, et l'avis accepté est nommé explicitement.
+        # --ignore-registry-errors : un registre en panne ne doit pas casser un build.
+        run: >
+          pnpm audit
+          --audit-level=high
+          --ignore GHSA-f88m-g3jw-g9cj
+          --ignore-registry-errors

@@ -1,0 +1,11 @@
+* text=auto eol=lf
+*.bat eol=crlf
+*.vbs eol=crlf
+*.png -text
+*.jpg -text
+*.ico -text
+*.onnx -text
+*.wav -text
+*.ttf -text
+*.pdf -text
+graphify-out/graph.json merge=graphify

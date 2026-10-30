@@ -1,0 +1,31 @@
+{
+  "name": "l_almanach_du_cip",
+  "version": "1.49.0",
+  "description": "Plateforme d'apprentissage premium pour la formation CIP",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build-rag": "node scripts/build-rag-index.js",
+    "build-vault": "node scripts/build-vault-index.js",
+    "check": "node scripts/check-data-integrity.js",
+    "prepackage": "pnpm run check:all",
+    "package": "node scripts/package-app.mjs",
+    "check:syntax": "node scripts/check-syntax.js",
+    "check:assets": "node scripts/check-assets.js",
+    "check:release": "node scripts/check-release-coherence.js",
+    "check:all": "pnpm run check:syntax && pnpm run check:assets && pnpm run check:release && pnpm run check"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "commonjs",
+  "packageManager": "pnpm@11.20.0",
+  "devDependencies": {
+    "electron": "^44.0.0",
+    "@electron/packager": "^20.3.0"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "onnxruntime-node": "1.21.0"
+  }
+}

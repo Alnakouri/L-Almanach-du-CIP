@@ -1,0 +1,303 @@
+[
+  {
+    "id": "vault-role-cip",
+    "title": "Rôle du Conseiller en Insertion Professionnelle (CIP)",
+    "content": "Le métier de Conseiller en Insertion Professionnelle est structuré par le référentiel RNCP en blocs de compétences :\n\n- CCP 1 - Accueillir pour analyser la demande des personnes (CCP 1 — Accueil & Diagnostic)\n- CCP 2 - Accompagner les personnes dans leur parcours (CCP 2 — Accompagnement)\n- CCP 3 - Mettre en œuvre une offre de services employeurs (CCP 3 — Relation Employeurs)\n- Transversal (compétences transversales mobilisées dans tous les blocs : respect des règles et procédures (CT1) et mobilisation des environnements numériques (CT2))\n\nLe CIP exerce ces missions de façon coordonnée pour faciliter l'insertion professionnelle des personnes accompagnées, dans une démarche éthique, partenariale et territoriale.",
+    "category": "synthese-rncp",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-ccp-1-accueillir-pour-analyser-la-demande-des-personnes",
+    "title": "CCP 1 - Accueillir pour analyser la demande des personnes",
+    "content": "CCP 1 — Accueil & Diagnostic\n\nCompétences professionnelles incluses :\n- CP1 — Informer des ressources en insertion et services dématérialisés\n- CP2 — Analyser la demande et poser les bases d'un diagnostic partagé\n- CP3 — Exercer une veille informationnelle, technique et prospective\n- CP4 — Travailler en équipe, en réseau et dans un cadre partenarial\n- CP5 — Réaliser le traitement administratif et les écrits professionnels",
+    "category": "ccp-presentation",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp1",
+    "title": "CP1 — Informer des ressources en insertion et services dématérialisés",
+    "content": "Compétence du bloc « CCP 1 - Accueillir pour analyser la demande des personnes » (CCP 1 — Accueil & Diagnostic).\n\nCritères de performance officiels :\n- Les mesures du territoire sont identifiées\n- La présentation est adaptée au public\n- Les techniques de reformulation sont mises en œuvre",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp2",
+    "title": "CP2 — Analyser la demande et poser les bases d'un diagnostic partagé",
+    "content": "Compétence du bloc « CCP 1 - Accueillir pour analyser la demande des personnes » (CCP 1 — Accueil & Diagnostic).\n\nCritères de performance officiels :\n- Les techniques d'entretien sont adaptées\n- Les éléments du diagnostic sont identifiés\n- L'adhésion de la personne est recherchée",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp3",
+    "title": "CP3 — Exercer une veille informationnelle, technique et prospective",
+    "content": "Compétence du bloc « CCP 1 - Accueillir pour analyser la demande des personnes » (CCP 1 — Accueil & Diagnostic).\n\nCritères de performance officiels :\n- Les caractéristiques du territoire sont identifiées\n- La méthode de recueil est pertinente\n- La présentation est claire et structurée",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp4",
+    "title": "CP4 — Travailler en équipe, en réseau et dans un cadre partenarial",
+    "content": "Compétence du bloc « CCP 1 - Accueillir pour analyser la demande des personnes » (CCP 1 — Accueil & Diagnostic).\n\nCritères de performance officiels :\n- Les partenariats sont identifiés\n- Les acteurs mobilisés répondent aux besoins\n- Les échanges respectent la confidentialité",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp5",
+    "title": "CP5 — Réaliser le traitement administratif et les écrits professionnels",
+    "content": "Compétence du bloc « CCP 1 - Accueillir pour analyser la demande des personnes » (CCP 1 — Accueil & Diagnostic).\n\nCritères de performance officiels :\n- Les procédures internes sont respectées\n- Les principes éthiques sont respectés\n- Les outils bureautiques sont utilisés à bon escient",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-ccp-2-accompagner-les-personnes-dans-leur-parcours",
+    "title": "CCP 2 - Accompagner les personnes dans leur parcours",
+    "content": "CCP 2 — Accompagnement\n\nCompétences professionnelles incluses :\n- CP6 — Contractualiser et suivre le parcours d'insertion\n- CP7 — Accompagner à l'élaboration du projet professionnel\n- CP8 — Accompagner la réalisation des projets professionnels\n- CP9 — Concevoir des ateliers thématiques\n- CP10 — Préparer et animer des ateliers thématiques\n- CP11 — Analyser sa pratique professionnelle",
+    "category": "ccp-presentation",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp6",
+    "title": "CP6 — Contractualiser et suivre le parcours d'insertion",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- L'alliance de travail est créée\n- L'accompagnement est contractualisé\n- Les étapes sont cohérentes avec le diagnostic",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp7",
+    "title": "CP7 — Accompagner à l'élaboration du projet professionnel",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- Une méthodologie d'élaboration est mise en œuvre\n- Les compétences sont identifiées avec la personne\n- La confrontation avec les réalités est planifiée",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp8",
+    "title": "CP8 — Accompagner la réalisation des projets professionnels",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- L'implication de la personne est favorisée\n- Le plan d'actions est cohérent\n- Les outils proposés favorisent la mise en œuvre",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp9",
+    "title": "CP9 — Concevoir des ateliers thématiques",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- L'analyse de la demande est pertinente\n- La progression pédagogique est adaptée\n- Le dispositif d'évaluation est en adéquation",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp10",
+    "title": "CP10 — Préparer et animer des ateliers thématiques",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- Les activités sont adaptées aux participants\n- L'animation favorise la dynamique de groupe\n- Le bilan est rédigé clairement",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp11",
+    "title": "CP11 — Analyser sa pratique professionnelle",
+    "content": "Compétence du bloc « CCP 2 - Accompagner les personnes dans leur parcours » (CCP 2 — Accompagnement).\n\nCritères de performance officiels :\n- Les faits, opinions et émotions sont distingués\n- Les axes d'amélioration sont identifiés\n- Les propositions d'ajustement sont pertinentes",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-ccp-3-mettre-en-uvre-une-offre-de-services-employeurs",
+    "title": "CCP 3 - Mettre en œuvre une offre de services employeurs",
+    "content": "CCP 3 — Relation Employeurs\n\nCompétences professionnelles incluses :\n- CP12 — Déployer des actions de prospection avec les employeurs\n- CP13 — Apporter un appui technique aux employeurs en recrutement\n- CP14 — Faciliter l'intégration et le maintien du salarié\n- CP15 — Inscrire ses actes dans une démarche de développement durable et inclusive",
+    "category": "ccp-presentation",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp12",
+    "title": "CP12 — Déployer des actions de prospection avec les employeurs",
+    "content": "Compétence du bloc « CCP 3 - Mettre en œuvre une offre de services employeurs » (CCP 3 — Relation Employeurs).\n\nCritères de performance officiels :\n- L'analyse du territoire est pertinente\n- La stratégie est cohérente\n- L'évaluation de l'action permet de mesurer les écarts",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp13",
+    "title": "CP13 — Apporter un appui technique aux employeurs en recrutement",
+    "content": "Compétence du bloc « CCP 3 - Mettre en œuvre une offre de services employeurs » (CCP 3 — Relation Employeurs).\n\nCritères de performance officiels :\n- L'analyse du besoin de recrutement est pertinente\n- Les profils proposés sont adaptés\n- Les mesures pour l'emploi sont mobilisées",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp14",
+    "title": "CP14 — Faciliter l'intégration et le maintien du salarié",
+    "content": "Compétence du bloc « CCP 3 - Mettre en œuvre une offre de services employeurs » (CCP 3 — Relation Employeurs).\n\nCritères de performance officiels :\n- Un parcours d'intégration est défini\n- Le suivi du salarié est assuré\n- Les difficultés font l'objet d'une médiation",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-cp15",
+    "title": "CP15 — Inscrire ses actes dans une démarche de développement durable et inclusive",
+    "content": "Compétence du bloc « CCP 3 - Mettre en œuvre une offre de services employeurs » (CCP 3 — Relation Employeurs).\n\nCritères de performance officiels :\n- Les dimensions DD sont intégrées\n- Les solutions éco-citoyennes sont favorisées\n- La posture professionnelle respecte les principes DD",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-transversal",
+    "title": "Transversal",
+    "content": "Transversal\n\nCompétences professionnelles incluses :\n- CT1 — Respecter des règles et des procédures\n- CT2 — Mobiliser les environnements numériques",
+    "category": "ccp-presentation",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-ct1",
+    "title": "CT1 — Respecter des règles et des procédures",
+    "content": "Compétence du bloc « Transversal » (Transversal).\n\nCritères de performance officiels :\n- Les procédures sont respectées\n- La confidentialité est respectée\n- Une veille réglementaire est effectuée",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-ct2",
+    "title": "CT2 — Mobiliser les environnements numériques",
+    "content": "Compétence du bloc « Transversal » (Transversal).\n\nCritères de performance officiels :\n- Les bonnes pratiques de sécurité sont appliquées\n- Les applicatifs sont utilisés à bon escient\n- Les outils collaboratifs sont utilisés de façon pertinente",
+    "category": "competence",
+    "source": "RNCP_REFERENTIEL"
+  },
+  {
+    "id": "vault-glossaire-fiche-d-accueil",
+    "title": "Fiche d'accueil (glossaire)",
+    "content": "**Fiche d'accueil** : Feuille remplie avec le visiteur pour garder la trace de sa première venue.\n\nCompétence RNCP associée : CP5.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-resume-a-voix-haute",
+    "title": "Résumé à voix haute (glossaire)",
+    "content": "**Résumé à voix haute** : Moment où l'on redit ce qu'on a compris pour laisser l'autre corriger.\n\nCompétence RNCP associée : CP2.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-classeur-commun",
+    "title": "Classeur commun (glossaire)",
+    "content": "**Classeur commun** : Meuble fermé à clé où l'équipe range les dossiers des visiteurs.\n\nCompétence RNCP associée : CP5.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-carte-vivante",
+    "title": "Carte vivante (glossaire)",
+    "content": "**Carte vivante** : Plan de la ville que toute l'équipe met à jour chaque semaine.\n\nCompétence RNCP associée : CP3.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-cafe-des-voisins",
+    "title": "Café des voisins (glossaire)",
+    "content": "**Café des voisins** : Rencontre mensuelle entre les structures du quartier.\n\nCompétence RNCP associée : CP4.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-accord-prealable",
+    "title": "Accord préalable (glossaire)",
+    "content": "**Accord préalable** : Permission demandée à la personne avant de parler de sa situation.\n\nCompétence RNCP associée : CP4.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-carnet-de-route",
+    "title": "Carnet de route (glossaire)",
+    "content": "**Carnet de route** : Cahier personnel où la personne note ses idées et ses prochaines actions.\n\nCompétence RNCP associée : CP7.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-prochaine-action",
+    "title": "Prochaine action (glossaire)",
+    "content": "**Prochaine action** : Petite tâche unique choisie à la fin d'un rendez-vous.\n\nCompétence RNCP associée : CP6.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-point-d-etape",
+    "title": "Point d'étape (glossaire)",
+    "content": "**Point d'étape** : Court rendez-vous pour regarder ce qui a été fait et ajuster la suite.\n\nCompétence RNCP associée : CP8.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-deroule-d-atelier",
+    "title": "Déroulé d'atelier (glossaire)",
+    "content": "**Déroulé d'atelier** : Feuille qui indique les étapes d'une séance, leur durée et le matériel.\n\nCompétence RNCP associée : CP9.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-tour-de-table",
+    "title": "Tour de table (glossaire)",
+    "content": "**Tour de table** : Moment où chaque participant prend la parole à son tour.\n\nCompétence RNCP associée : CP10.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-journal-de-bord",
+    "title": "Journal de bord (glossaire)",
+    "content": "**Journal de bord** : Carnet où l'animatrice note ce qu'elle veut refaire ou modifier.\n\nCompétence RNCP associée : CP11.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-fiche-entreprise",
+    "title": "Fiche entreprise (glossaire)",
+    "content": "**Fiche entreprise** : Page qui résume ce que l'on sait d'un employeur et de ses besoins.\n\nCompétence RNCP associée : CP12.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-binome-d-arrivee",
+    "title": "Binôme d'arrivée (glossaire)",
+    "content": "**Binôme d'arrivée** : Collègue expérimenté qui guide une personne qui vient d'arriver.\n\nCompétence RNCP associée : CP14.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-phrase-de-passe",
+    "title": "Phrase de passe (glossaire)",
+    "content": "**Phrase de passe** : Suite de quatre mots faciles à retenir, plus solide qu'un mot de passe court.\n\nCompétence RNCP associée : CT2.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-glossaire-page-partagee",
+    "title": "Page partagée (glossaire)",
+    "content": "**Page partagée** : Document unique que toute l'équipe lit et complète.\n\nCompétence RNCP associée : CP15.",
+    "category": "glossaire",
+    "source": "CIP_GLOSSAIRE"
+  },
+  {
+    "id": "vault-faq-maison-horizon",
+    "title": "Qu'est-ce que la Maison Horizon ?",
+    "content": "La Maison Horizon est une association imaginaire, inventée pour cette démonstration. Elle se trouve à Valbourg, une ville qui n'existe pas. Nadia, Inès, Karim et les autres personnages sont fictifs.",
+    "category": "faq",
+    "source": "FAQ_CURATED"
+  },
+  {
+    "id": "vault-faq-carnet-route",
+    "title": "À quoi sert le carnet de route ?",
+    "content": "Le carnet de route appartient à la personne : elle y note ses idées et choisit une seule prochaine action à chaque rendez-vous. En le relisant, elle repère les mots qui reviennent et fait émerger une piste.",
+    "category": "faq",
+    "source": "FAQ_CURATED"
+  },
+  {
+    "id": "vault-faq-atelier-jeudi",
+    "title": "Comment se passe l'atelier du jeudi ?",
+    "content": "Nadia prépare un déroulé sur une seule feuille et dispose les chaises en cercle. Un tour de table lance la séance, l'entraînement se fait en binômes et chacun écrit ce qu'il garde et ce qu'il changerait.",
+    "category": "faq",
+    "source": "FAQ_CURATED"
+  },
+  {
+    "id": "vault-faq-message-piege",
+    "title": "Que faire devant un message piégé ?",
+    "content": "Ne pas cliquer sur le lien, montrer le message à ses collègues et appeler le prestataire avec un numéro déjà connu. L'équipe de la Maison Horizon utilise aussi des phrases de passe pour protéger ses comptes.",
+    "category": "faq",
+    "source": "FAQ_CURATED"
+  },
+  {
+    "id": "vault-user-note-demo-0",
+    "title": "Note de démonstration",
+    "content": "Cette note fictive montre que l'on peut ajouter ses propres fiches Markdown à la recherche de l'Almanach.\nNadia y garde une idée pour le prochain atelier du jeudi : commencer par un tour de table sur le dernier voyage en bus.",
+    "category": "user-note",
+    "source": "USER_VAULT"
+  }
+]
