@@ -237,8 +237,9 @@
             ['toggleAudio', 'btnQuizIA', 'showFlashcards', 'toggleView'].forEach(id => {
                 document.getElementById(id).disabled = indisponible;
             });
-            // Les PDF d'origine n'existent que dans l'application installée.
-            if (!window.electronAPI) document.getElementById('toggleView').disabled = true;
+            // Les PDF d'origine n'existent que dans l'application installée : en ligne, le bouton
+            // désactivé passait pour cassé, il n'est donc pas affiché.
+            if (!window.electronAPI) document.getElementById('toggleView').style.display = 'none';
             if (indisponible) {
                 readerTOC.innerHTML = '';
                 readerContent.innerHTML = `

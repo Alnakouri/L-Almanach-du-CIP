@@ -3,7 +3,7 @@
 ## Identité
 - **Type** : Application Electron (Desktop) + PWA (Web)
 - **But** : Plateforme d'apprentissage hors ligne, montrée ici avec un contenu entièrement fictif.
-- **Version** : 1.49.0 (Mastery Edition v9.32.0) | Electron 44.0 | Cache SW v19-59
+- **Version** : 1.49.1 (Mastery Edition v9.32.1) | Electron 44.0 | Cache SW v19-60
 
 ## Règles
 - Tout le contenu de ce dépôt est inventé : Maison Horizon, Valbourg et leurs personnages n'existent pas.

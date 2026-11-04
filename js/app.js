@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Affichage version pour debug rapide (inspectable via DevTools)
-    window.CIP_BUILD = 'v9.32.0';
+    window.CIP_BUILD = 'v9.32.1';
     console.log('%c[L\'Almanach du CIP] %cBuild ' + window.CIP_BUILD,
         'color:#6366f1; font-weight:bold;', 'color:#94a3b8;');
 
@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         return doc.body.innerHTML;
     }
+    window.safeMarkdownToHtml = safeMarkdownToHtml;
 
     /**
      * Câble un handler onclick en sécurité :
@@ -521,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // v7.4.3 : ajout du champ 'content' pour permettre au RAG de matcher
             // sur le texte des chapitres, pas seulement sur les titres.
             fields: ['title', 'module', 'type', 'content'],
-            storeFields: ['title', 'module', 'type', 'item', 'content', 'isFile', 'isNote', 'isGlossaire', 'isFlash', 'room'],
+            storeFields: ['title', 'module', 'type', 'item', 'content', 'isFile', 'isNote', 'isGlossaire', 'isFlash', 'isVault', 'room'],
             // v8.7.1 : appliqué à l'indexation ET à la requête. Minuscule + retrait des accents
             // (matching tolérant, aligné sur _extractQueryKeywords) + drop des stopwords FR.
             // Neutralise la pollution des titres FAQ interrogatifs (« qu'est-ce », « comment »).
@@ -714,6 +715,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    // Le chapitre qui contient ce fichier de cours, quelle que soit son extension (.pdf ou .json).
+    function chapitreDuFichier(file) {
+        const base = String(file).replace(/\.(pdf|json)$/i, '');
+        for (const mod of courseData.modules || []) {
+            for (const sub of mod.sub_modules || []) {
+                if ((sub.files || []).some(f => f.replace(/\.(pdf|json)$/i, '') === base)) {
+                    return { ...sub, parentName: mod.name };
+                }
+            }
+        }
+        return null;
+    }
+
     function performSearch(query) {
         lastSearchQuery = query;
         contentGrid.innerHTML = '';
@@ -747,6 +761,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'NOTE':       { icon: '📝', label: 'MA NOTE',    color: '#10b981' },
                 'GLOSSAIRE':  { icon: '📚', label: 'GLOSSAIRE',  color: '#f59e0b' },
                 'FLASHCARD':  { icon: '🧠', label: 'FLASHCARD',  color: '#ef4444' },
+                'CONTENT_CHUNK': { icon: '📖', label: 'DANS LE COURS', color: 'var(--accent)' },
+                'VAULT':      { icon: '🗂️', label: 'FICHE',      color: '#0ea5e9' },
             }[r.type] || { icon: '📌', label: r.type, color: 'var(--accent)' };
 
             card.innerHTML = `
@@ -769,11 +785,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('btnGlossaire').click();
                 } else if (r.isFlash) {
                     if (typeof showFlashcards === 'function') showFlashcards([r.item]);
+                } else if (r.isVault) {
+                    const modal = document.getElementById('noteModal');
+                    document.getElementById('noteModalTitle').innerText = `🗂️ ${r.title}`;
+                    document.getElementById('noteModalBody').innerHTML = safeMarkdownToHtml(r.content);
+                    modal.classList.remove('hidden');
                 } else if (r.isFile) {
-                    markAsRead(r.item);
                     const mod = courseData.modules.find(m => m.files && m.files.includes(r.item));
-                    if (mod) window.open(`./${encodeURIComponent(mod.name)}/${encodeURIComponent(r.item)}`, '_blank');
-                    else window.open(`./data/content/${encodeURIComponent(r.item.replace('.pdf', '.json'))}`);
+                    if (mod) {
+                        markAsRead(r.item);
+                        window.open(`./${encodeURIComponent(mod.name)}/${encodeURIComponent(r.item)}`, '_blank');
+                    } else {
+                        // Un extrait de cours (rag-index) porte le nom du .json : on ouvre son chapitre
+                        // dans le lecteur plutôt que le JSON brut dans un onglet.
+                        const sub = chapitreDuFichier(r.item);
+                        openSubModule(sub || { name: r.title, files: [r.item], parentName: 'Cours' });
+                    }
                 } else {
                     openSubModule(r.item);
                 }
@@ -1398,7 +1425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // v9.32.0 : l'export public a un contenu fictif (COURSE_DATA.demo) : on l'annonce d'emblée.
     if (window.COURSE_DATA && window.COURSE_DATA.demo) {
         document.querySelector('.sidebar-header .logo').textContent = 'CIP · démo fictive';
-        document.getElementById('currentModuleSubtitle').textContent = "Démo : tout le contenu est inventé, les vrais supports de formation ne sont pas publiés.";
+        document.getElementById('currentModuleSubtitle').textContent = "Démo d'un projet en cours de développement : tout le contenu est inventé, les vrais supports de formation ne sont pas publiés.";
     }
 
     // v9.29.0 : sonde de boot — une entrée de journal par lancement (état machine

@@ -481,7 +481,12 @@ class AIHelper {
         const msg = document.createElement('div');
         msg.className = `message ${side}`;
         if (id) msg.id = id;
-        msg.innerText = text;
+        // Les réponses sont écrites en Markdown (**titre**, *mode recherche*) ; le texte saisi reste brut.
+        if (side === 'system' && typeof window.safeMarkdownToHtml === 'function') {
+            msg.innerHTML = window.safeMarkdownToHtml(text);
+        } else {
+            msg.innerText = text;
+        }
         container.appendChild(msg);
         container.scrollTop = container.scrollHeight;
     }

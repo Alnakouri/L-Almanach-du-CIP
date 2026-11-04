@@ -4,6 +4,8 @@
 
 Application **Electron** (desktop) + **PWA** (web) qui réunit un lecteur de cours, un moteur de quiz et d'examen blanc, des flashcards à répétition espacée, des mises en situation et une synthèse vocale, le tout sans connexion.
 
+> 🚧 **Projet en cours de développement** : l'application n'est pas terminée, des fonctions peuvent encore changer ou manquer.
+>
 > Projet **non commercial / gratuit**. Voir [LICENSE](./LICENSE).
 
 **🌐 Démo en ligne : https://alnakouri.github.io/L-Almanach-du-CIP/**

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almanach-cip-v19-59';
+const CACHE_NAME = 'almanach-cip-v19-60';
 const STATIC_ASSETS = [
   './',
   './index.html',

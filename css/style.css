@@ -555,6 +555,8 @@ body {
 }
 
 .message.system { background: rgba(255,255,255,0.1); align-self: flex-start; }
+.message p { margin: 0 0 0.5em; }
+.message p:last-child { margin-bottom: 0; }
 .message.user { background: var(--accent); align-self: flex-end; }
 
 .chat-input-area {

@@ -111,6 +111,11 @@
         const q = window.QuizStore.current.questions[window.QuizStore.idx];
         document.getElementById('quizQuestion').innerText = q.q;
         document.getElementById('quizResult').classList.add('hidden');
+        // Le bouton n'apparaît qu'après la réponse (checkAnswer) : visible avant, il sautait la
+        // question. La fin d'un quiz précédent l'a recâblé sur « Fermer », on rétablit son rôle.
+        const nextBtn = document.getElementById('nextQuiz');
+        nextBtn.classList.add('hidden');
+        nextBtn.onclick = () => window.quizNextHandler();
         const options = document.getElementById('quizOptions');
         options.innerHTML = '';
 
