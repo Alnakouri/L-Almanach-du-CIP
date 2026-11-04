@@ -14,7 +14,7 @@ Application **Electron** (desktop) + **PWA** (web) qui réunit un lecteur de cou
 
 - **Ce que fait le projet** : il permet de réviser une formation sans connexion : cours lus à voix haute, quiz, examen blanc, flashcards et mises en situation.
 - **Pour qui** : les personnes qui préparent le titre professionnel CIP. Je l'ai construit pour quelqu'un qui en avait besoin.
-- **Fait avec l'IA** : je développe avec des assistants IA (Claude Code, Google Antigravity). Je décide ce que fait l'application, j'en fais écrire une partie par l'IA, puis je vérifie : contrôles automatiques et CI à chaque envoi, et essais à la main dans l'application avant de valider.
+- **Fait avec l'IA** : tout le code est écrit par des assistants IA (Claude Code, Google Antigravity), pas par moi. Les idées viennent de moi : je décide ce que fait l'application et comment elle doit se comporter, puis je l'essaie avant de valider. Des contrôles automatiques et une CI vérifient chaque envoi.
 
 ## 🎭 Ce dépôt contient un contenu fictif
 
