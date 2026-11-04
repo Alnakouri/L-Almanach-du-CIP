@@ -73,18 +73,15 @@ jobs:
           }
 
       - name: Vulnérabilités connues
-        # GHSA-f88m-g3jw-g9cj (sharp < 0.35, via @huggingface/transformers) est mis en
-        # sourdine EN CONNAISSANCE DE CAUSE : l'app est du texte pur, aucun chemin de
-        # code n'atteint sharp, et le corriger imposerait la majeure transformers 4.x
-        # qui remettrait en jeu le réglage q4 / kv_cache_dtype du modèle fine-tuné.
-        # Toute AUTRE faille haute doit faire rougir cette étape.
+        # Toute faille haute fait rougir cette étape. sharp est forcé en ^0.35.5 dans
+        # pnpm-workspace.yaml, il n'y a donc plus d'avis à mettre en sourdine.
         #
-        # `pnpm audit --ignore` fait nativement le filtrage par avis que l'on écrivait
-        # à la main du temps de `npm audit` : on garde --audit-level=high plutôt que de
-        # le baisser, et l'avis accepté est nommé explicitement.
+        # ⚠️ Ne pas remettre `--ignore <GHSA>` ici : sous pnpm 11, ce drapeau écrit l'avis
+        # dans pnpm-workspace.yaml puis sort en 0 SANS auditer. Jusqu'au 04/11/2026,
+        # cette étape passait ainsi au vert avec 12 failles hautes. Un avis accepté va
+        # dans `auditConfig.ignoreGhsas` de pnpm-workspace.yaml, avec sa justification.
         # --ignore-registry-errors : un registre en panne ne doit pas casser un build.
         run: >
           pnpm audit
           --audit-level=high
-          --ignore GHSA-f88m-g3jw-g9cj
           --ignore-registry-errors

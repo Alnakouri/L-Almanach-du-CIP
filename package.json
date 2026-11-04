@@ -21,8 +21,8 @@
   "type": "commonjs",
   "packageManager": "pnpm@11.20.0",
   "devDependencies": {
-    "electron": "^44.0.0",
-    "@electron/packager": "^20.3.0"
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.10.1"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.8.1",

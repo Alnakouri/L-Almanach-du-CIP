@@ -13,3 +13,8 @@ overrides:
   # plage vulnerable et @electron/packager 20.3.0 est deja la derniere version, donc
   # pas de correctif en amont : on force la version corrigee ici.
   '@xmldom/xmldom': '>=0.9.12'
+  # GHSA-f88m-g3jw-g9cj, GHSA-rgj7-g3m4-5g8c, GHSA-wq5f-xc86-pv6w — libvips, libheif et
+  # librsvg embarques par sharp < 0.35.5. transformers 3.8.1 l'importe des le chargement
+  # (src/utils/image.js) mais l'app ne traite aucune image : forcer sharp evite la
+  # majeure transformers 4.x et son reglage q4 / kv_cache_dtype.
+  sharp: '^0.35.5'
