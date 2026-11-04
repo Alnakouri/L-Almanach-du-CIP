@@ -1,6 +1,6 @@
 {
   "name": "l_almanach_du_cip",
-  "version": "1.49.1",
+  "version": "1.49.2",
   "description": "Plateforme d'apprentissage premium pour la formation CIP",
   "main": "main.js",
   "scripts": {

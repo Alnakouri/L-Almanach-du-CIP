@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Affichage version pour debug rapide (inspectable via DevTools)
-    window.CIP_BUILD = 'v9.32.1';
+    window.CIP_BUILD = 'v9.32.2';
     console.log('%c[L\'Almanach du CIP] %cBuild ' + window.CIP_BUILD,
         'color:#6366f1; font-weight:bold;', 'color:#94a3b8;');
 
