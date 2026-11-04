@@ -10,6 +10,12 @@ Application **Electron** (desktop) + **PWA** (web) qui réunit un lecteur de cou
 
 **🌐 Démo en ligne : https://alnakouri.github.io/L-Almanach-du-CIP/**
 
+## 🧭 En bref
+
+- **Ce que fait le projet** : il permet de réviser une formation sans connexion : cours lus à voix haute, quiz, examen blanc, flashcards et mises en situation.
+- **Pour qui** : les personnes qui préparent le titre professionnel CIP. Je l'ai construit pour quelqu'un qui en avait besoin.
+- **Fait avec l'IA** : je développe avec des assistants IA (Claude Code, Google Antigravity). Je décide ce que fait l'application, j'en fais écrire une partie par l'IA, puis je vérifie : contrôles automatiques et CI à chaque envoi, et essais à la main dans l'application avant de valider.
+
 ## 🎭 Ce dépôt contient un contenu fictif
 
 Les vrais supports de formation sont confidentiels : ils ne sont pas dans ce dépôt, ni aucun texte qui en dérive. Pour montrer l'application, tout le contenu a été **inventé** : la Maison Horizon, la ville de Valbourg, Nadia, Inès et Karim n'existent pas. Seul le cadre public du titre professionnel (blocs CCP, compétences RNCP) est réel.
